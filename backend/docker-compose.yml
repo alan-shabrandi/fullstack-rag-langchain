@@ -1,27 +1,68 @@
+version: '3.9'
+
 services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: rag-api
+
+    restart: unless-stopped
+
+    env_file:
+      - .env.production
+
+    ports:
+      - '3001:3001'
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_started
+
+    volumes:
+      - ./uploads:/app/uploads
+
+    networks:
+      - rag-network
+
   postgres:
     image: pgvector/pgvector:pg16
-    container_name: ai-postgres
 
-    restart: always
+    container_name: rag-postgres
+
+    restart: unless-stopped
 
     environment:
+      POSTGRES_DB: rag_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ai_chat
 
     ports:
       - '5432:5432'
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - rag-network
 
   redis:
     image: redis:7-alpine
 
-    container_name: ai-redis
+    container_name: rag-redis
 
-    restart: always
+    restart: unless-stopped
 
     ports:
       - '6379:6379'
@@ -29,6 +70,12 @@ services:
     volumes:
       - redis_data:/data
 
+    networks:
+      - rag-network
+
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  rag-network:

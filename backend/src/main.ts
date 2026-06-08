@@ -7,18 +7,23 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: true,
+    origin: process.env.CORS_ORIGIN?.split(',') ?? true,
     credentials: true,
   });
+
+  app.setGlobalPrefix('api');
 
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       transform: true,
+      forbidNonWhitelisted: true,
     }),
   );
 
-  await app.listen(3001);
+  const port = Number(process.env.PORT || 3001);
+
+  await app.listen(port);
 }
 
 bootstrap();

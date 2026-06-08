@@ -12,6 +12,7 @@ import { DocumentModule } from './document/document.module';
 import { VectorModule } from './vector/vector.module';
 import { RetrieverModule } from './retriever/retriever.module';
 import { RagModule } from './rag/rag.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { RagModule } from './rag/rag.module';
     VectorModule,
     RetrieverModule,
     RagModule,
+    HealthModule,
   ],
 })
 export class AppModule {}

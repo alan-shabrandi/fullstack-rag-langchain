@@ -28,11 +28,18 @@
     }
   },
   "include": [
-    "package.json",
-    "src/llm/llm.service.ts",
-    "src/document/chunk.service.ts",
-    "src/document/pdf.service.ts",
-    "src/chat/chat.controller.ts"
+    "prisma/schema.prisma",
+    "src/app.module.ts",
+    "src/chat/chat.module.ts",
+    "src/chat/chat.service.ts",
+    "src/chat/chat.controller.ts",
+    "src/rag/rag.service.ts",
+    "src/rag/rag.module.ts",
+    "src/retriever/*",
+    "src/document/*",
+    "src/queue/*",
+    ".env",
+    "src/main.ts"
   ],
   "ignore": {
     "useGitignore": true,
