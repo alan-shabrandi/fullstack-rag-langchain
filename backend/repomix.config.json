@@ -1,0 +1,51 @@
+{
+  "$schema": "https://repomix.com/schemas/latest/schema.json",
+  "input": {
+    "maxFileSize": 52428800
+  },
+  "output": {
+    "filePath": "repomix-output.md",
+    "style": "markdown",
+    "parsableStyle": false,
+    "fileSummary": true,
+    "directoryStructure": true,
+    "files": true,
+    "removeComments": false,
+    "removeEmptyLines": false,
+    "compress": false,
+    "topFilesLength": 5,
+    "showLineNumbers": false,
+    "truncateBase64": false,
+    "copyToClipboard": false,
+    "includeFullDirectoryStructure": false,
+    "tokenCountTree": false,
+    "git": {
+      "sortByChanges": true,
+      "sortByChangesMaxCommits": 100,
+      "includeDiffs": false,
+      "includeLogs": false,
+      "includeLogsCount": 50
+    }
+  },
+  "include": [
+    "prisma/schema.prisma",
+    "src/auth/jwt.strategy.ts",
+    "src/auth/decorators/current-user.decorator.ts",
+    "src/prisma/prisma.service.ts",
+    "src/ai/ai.service.ts",
+    "src/ai/ai.controller.ts",
+    "src/llm/llm.service.ts"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDotIgnore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": []
+  },
+  "security": {
+    "enableSecurityCheck": true
+  },
+  "tokenCount": {
+    "encoding": "o200k_base"
+  }
+}

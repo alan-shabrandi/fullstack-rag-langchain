@@ -1,0 +1,26 @@
+# --- محیط و کانفیگ ---
+.env
+.env.*
+!.env.example
+
+# --- تست‌ها (اختیاری - اگر می‌خواهید هوش مصنوعی فقط روی کد اصلی تمرکز کند) ---
+**/*.spec.ts
+**/*.e2e-spec.ts
+test/
+
+# --- فایل‌های تولیدی و کش ---
+dist/
+build/
+.cache/
+.eslintcache
+
+# --- مستندات و دایرکتوری‌های غیرضروری ---
+README.md
+CHANGELOG.md
+docs/
+docker-compose.yml
+Dockerfile
+
+# --- فایل‌های سیستمی ---
+.DS_Store
+Thumbs.db
