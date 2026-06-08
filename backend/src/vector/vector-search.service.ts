@@ -1,14 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
+// تعریف اینترفیس در اینجا (اگر در فایل دیگری تعریف شده، آن را Import کنید)
+export interface Chunk {
+  id: string;
+  documentId: string;
+  content: string;
+  chunkIndex: number; // این فیلد در کوئری شما وجود دارد
+  score: number;
+}
+
 @Injectable()
 export class VectorSearchService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async similaritySearch(embedding: number[], userId: string, limit = 5) {
+  async similaritySearch(
+    embedding: number[],
+    userId: string,
+    limit = 5,
+  ): Promise<Chunk[]> {
     const vector = `[${embedding.join(',')}]`;
 
-    return this.prisma.$queryRawUnsafe(
+    // استفاده از <Chunk[]> برای مشخص کردن خروجی
+    return this.prisma.$queryRawUnsafe<Chunk[]>(
       `
       SELECT
           dc.id,

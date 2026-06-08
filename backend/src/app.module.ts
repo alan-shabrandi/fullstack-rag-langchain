@@ -11,6 +11,7 @@ import { QueueModule } from './queue/queue.module';
 import { DocumentModule } from './document/document.module';
 import { VectorModule } from './vector/vector.module';
 import { RetrieverModule } from './retriever/retriever.module';
+import { RagModule } from './rag/rag.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { RetrieverModule } from './retriever/retriever.module';
     DocumentModule,
     VectorModule,
     RetrieverModule,
+    RagModule,
   ],
 })
 export class AppModule {}

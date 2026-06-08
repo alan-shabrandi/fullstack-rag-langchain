@@ -18,37 +18,93 @@ export class LlmService {
     });
   }
 
-  async generateChatResponse(messages: { role: string; content: string }[]) {
-    const history = messages.map((msg) => {
-      return msg.role === 'USER'
+  async generateChatResponse(
+    messages: {
+      role: string;
+      content: string;
+    }[],
+  ) {
+    const history = messages.map((msg) =>
+      msg.role === 'USER'
         ? new HumanMessage(msg.content)
-        : new AIMessage(msg.content);
-    });
+        : new AIMessage(msg.content),
+    );
 
     const prompt = ChatPromptTemplate.fromMessages([
-      [
-        'system',
-        'You are a helpful AI assistant. Answer clearly and accurately.',
-      ],
+      ['system', 'You are a helpful AI assistant.'],
       new MessagesPlaceholder('history'),
     ]);
 
     const chain = prompt.pipe(this.model);
 
-    const result = await chain.invoke({ history });
+    const result = await chain.invoke({
+      history,
+    });
 
-    // مدیریت خروجی برای جلوگیری از خطای [object Object]
-    if (typeof result.content === 'string') {
-      return result.content;
+    return this.extractText(result.content);
+  }
+
+  async generateRagResponse(
+    question: string,
+    context: string,
+    history: {
+      role: string;
+      content: string;
+    }[],
+  ) {
+    const messages = history.map((msg) =>
+      msg.role === 'USER'
+        ? new HumanMessage(msg.content)
+        : new AIMessage(msg.content),
+    );
+
+    const prompt = ChatPromptTemplate.fromMessages([
+      [
+        'system',
+        `
+You are a RAG assistant.
+
+Answer ONLY using the provided context.
+
+If the answer is not contained in the context,
+say:
+
+"I could not find that information in the uploaded documents."
+
+Context:
+
+{context}
+          `,
+      ],
+
+      new MessagesPlaceholder('history'),
+
+      ['human', '{question}'],
+    ]);
+
+    const chain = prompt.pipe(this.model);
+
+    const result = await chain.invoke({
+      context,
+      question,
+      history: messages,
+    });
+
+    return this.extractText(result.content);
+  }
+
+  private extractText(content: any) {
+    if (typeof content === 'string') {
+      return content;
     }
 
-    if (Array.isArray(result.content)) {
-      return result.content
-        .filter((part) => 'text' in part)
-        .map((part) => (part as any).text)
+    if (Array.isArray(content)) {
+      return content
+        .filter((p) => 'text' in p)
+        .map((p: any) => p.text)
         .join('');
     }
 
-    return String(result.content);
+    return String(content);
   }
 }

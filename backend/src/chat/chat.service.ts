@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { LlmService } from '../llm/llm.service';
 import { RetrieverService } from '../retriever/retriever.service';
+import { RagService } from '../rag/rag.service';
 @Injectable()
 export class ChatService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly llmService: LlmService,
     private readonly retrieverService: RetrieverService,
+    private readonly ragService: RagService,
   ) {}
 
   // Create a new chat
@@ -21,19 +21,29 @@ export class ChatService {
 
   // Send a message (user message + assistant response)
   async sendMessage(userId: string, message: string, chatId?: string) {
-    let chat: { id: string; userId: string } | null = null;
+    let chat: {
+      id: string;
+      userId: string;
+    } | null = null;
 
     if (chatId) {
       chat = await this.prisma.chat.findUnique({
-        where: { id: chatId },
-        include: { messages: true },
+        where: {
+          id: chatId,
+        },
       });
-      if (!chat) throw new NotFoundException('Chat not found');
+
+      if (!chat) {
+        throw new NotFoundException('Chat not found');
+      }
+
+      if (chat.userId !== userId) {
+        throw new NotFoundException('Chat not found');
+      }
     } else {
       chat = await this.createChat(userId);
     }
 
-    // Save user message
     const userMessage = await this.prisma.message.create({
       data: {
         chatId: chat.id,
@@ -42,33 +52,38 @@ export class ChatService {
       },
     });
 
-    // Fetch previous messages for context
     const messages = await this.prisma.message.findMany({
-      where: { chatId: chat.id },
-      orderBy: { createdAt: 'asc' },
+      where: {
+        chatId: chat.id,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
     });
 
-    const context = messages.map((m) => ({
-      role: m.role.toLowerCase(),
+    const history = messages.map((m) => ({
+      role: m.role,
       content: m.content,
     }));
-    // Generate assistant response
-    const assistantContent =
-      await this.llmService.generateChatResponse(context);
 
-    // Save assistant message
+    const ragResult = await this.ragService.answer(userId, message, history);
+
     const assistantMessage = await this.prisma.message.create({
       data: {
         chatId: chat.id,
-        content: assistantContent,
+        content: ragResult.answer,
         role: 'ASSISTANT',
       },
     });
 
     return {
       chatId: chat.id,
+
       userMessage,
+
       assistantMessage,
+
+      sources: ragResult.sources,
     };
   }
 
