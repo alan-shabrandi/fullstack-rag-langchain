@@ -1,10 +1,18 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
+
 import { Job } from 'bullmq';
+
 import { Injectable, Logger } from '@nestjs/common';
+
 import { PrismaService } from '../prisma/prisma.service';
+
 import { PdfService } from '../document/pdf.service';
+import { ChunkService } from '../document/chunk.service';
+
 import { DOCUMENT_QUEUE } from './queue.constants';
+
 import { DocumentStatus } from '../generated/prisma';
+
 @Injectable()
 @Processor(DOCUMENT_QUEUE)
 export class DocumentProcessor extends WorkerHost {
@@ -13,20 +21,39 @@ export class DocumentProcessor extends WorkerHost {
   constructor(
     private readonly prisma: PrismaService,
     private readonly pdfService: PdfService,
+    private readonly chunkService: ChunkService,
   ) {
     super();
   }
 
   async process(job: Job<any>) {
-    const { documentId, filePath } = job.data;
+    const { documentId, filePath, mimeType } = job.data;
 
     try {
       await this.prisma.document.update({
-        where: { id: documentId },
-        data: { status: DocumentStatus.PROCESSING },
+        where: {
+          id: documentId,
+        },
+        data: {
+          status: DocumentStatus.PROCESSING,
+        },
       });
 
+      if (mimeType !== 'application/pdf') {
+        throw new Error('Only PDF currently supported');
+      }
+
       const extractedText = await this.pdfService.extractText(filePath);
+
+      const chunks = await this.chunkService.split(extractedText);
+
+      await this.prisma.documentChunk.createMany({
+        data: chunks.map((content, index) => ({
+          documentId,
+          content,
+          chunkIndex: index,
+        })),
+      });
 
       await this.prisma.document.update({
         where: {
@@ -38,10 +65,8 @@ export class DocumentProcessor extends WorkerHost {
         },
       });
 
-      this.logger.log(`Document ${documentId} processed`);
+      this.logger.log(`Document ${documentId} processed successfully`);
     } catch (error) {
-      this.logger.error(error);
-
       await this.prisma.document.update({
         where: {
           id: documentId,
@@ -50,6 +75,8 @@ export class DocumentProcessor extends WorkerHost {
           status: DocumentStatus.FAILED,
         },
       });
+
+      this.logger.error(error);
 
       throw error;
     }

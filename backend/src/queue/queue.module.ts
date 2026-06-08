@@ -5,8 +5,13 @@ import { DocumentProcessor } from './document.processor';
 import { PrismaService } from '../prisma/prisma.service';
 import { DOCUMENT_QUEUE } from './queue.constants';
 import { PdfModule } from '../document/pdf.module';
+import { ChunkModule } from '../document/chunk.module';
 @Module({
-  imports: [BullModule.registerQueue({ name: DOCUMENT_QUEUE }), PdfModule],
+  imports: [
+    BullModule.registerQueue({ name: DOCUMENT_QUEUE }),
+    PdfModule,
+    ChunkModule,
+  ],
   providers: [QueueService, DocumentProcessor, PrismaService],
   exports: [QueueService],
 })
