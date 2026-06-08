@@ -6,11 +6,13 @@ import { PrismaService } from '../prisma/prisma.service';
 import { DOCUMENT_QUEUE } from './queue.constants';
 import { PdfModule } from '../document/pdf.module';
 import { ChunkModule } from '../document/chunk.module';
+import { EmbeddingsModule } from '../embeddings/embeddings.module';
 @Module({
   imports: [
     BullModule.registerQueue({ name: DOCUMENT_QUEUE }),
     PdfModule,
     ChunkModule,
+    EmbeddingsModule,
   ],
   providers: [QueueService, DocumentProcessor, PrismaService],
   exports: [QueueService],

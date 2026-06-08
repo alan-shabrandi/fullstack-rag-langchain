@@ -54,12 +54,14 @@ model Document {
 }
 
 model DocumentChunk {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   documentId String
   content    String
   chunkIndex Int
-  createdAt  DateTime @default(now())
-  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  embedding  Json?
+  embeddedAt DateTime?
+  createdAt  DateTime  @default(now())
+  document   Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
 
   @@index([documentId])
 }

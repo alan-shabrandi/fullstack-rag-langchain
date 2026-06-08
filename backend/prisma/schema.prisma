@@ -58,6 +58,8 @@ model DocumentChunk {
   documentId String
   content    String
   chunkIndex Int
+  embedding     Json?
+  embeddedAt    DateTime?
   createdAt  DateTime @default(now())
   document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
   @@index([documentId])
