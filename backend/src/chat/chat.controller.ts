@@ -32,4 +32,12 @@ export class ChatController {
   ) {
     return this.chatService.getMessages(chatId, user.userId);
   }
+
+  @Get('search/:query')
+  async search(
+    @Param('query') query: string,
+    @CurrentUser() user: { userId: string },
+  ) {
+    return this.chatService.testRetrieval(user.userId, query);
+  }
 }

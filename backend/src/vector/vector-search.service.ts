@@ -5,25 +5,27 @@ import { PrismaService } from '../prisma/prisma.service';
 export class VectorSearchService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async similaritySearch(embedding: number[], limit = 5) {
+  async similaritySearch(embedding: number[], userId: string, limit = 5) {
     const vector = `[${embedding.join(',')}]`;
 
-    const result = await this.prisma.$queryRawUnsafe(
+    return this.prisma.$queryRawUnsafe(
       `
       SELECT
-        id,
-        "documentId",
-        content,
-        "chunkIndex",
-        1 - (embedding <=> $1::vector) AS score
-      FROM "DocumentChunk"
-      ORDER BY embedding <=> $1::vector
-      LIMIT $2
+          dc.id,
+          dc."documentId",
+          dc.content,
+          dc."chunkIndex",
+          1 - (dc.embedding <=> $1::vector) AS score
+      FROM "DocumentChunk" dc
+      INNER JOIN "Document" d
+          ON d.id = dc."documentId"
+      WHERE d."userId" = $2
+      ORDER BY dc.embedding <=> $1::vector
+      LIMIT $3
       `,
       vector,
+      userId,
       limit,
     );
-
-    return result;
   }
 }

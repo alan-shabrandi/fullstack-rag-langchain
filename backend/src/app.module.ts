@@ -10,6 +10,7 @@ import { LlmModule } from './llm/llm.module';
 import { QueueModule } from './queue/queue.module';
 import { DocumentModule } from './document/document.module';
 import { VectorModule } from './vector/vector.module';
+import { RetrieverModule } from './retriever/retriever.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { VectorModule } from './vector/vector.module';
 
     DocumentModule,
     VectorModule,
+    RetrieverModule,
   ],
 })
 export class AppModule {}

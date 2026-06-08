@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { LlmService } from '../llm/llm.service';
-
+import { RetrieverService } from '../retriever/retriever.service';
 @Injectable()
 export class ChatService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly llmService: LlmService,
+    private readonly retrieverService: RetrieverService,
   ) {}
 
   // Create a new chat
@@ -89,5 +90,9 @@ export class ChatService {
     if (!chat || chat.userId !== userId)
       throw new NotFoundException('Chat not found');
     return chat.messages;
+  }
+
+  async testRetrieval(userId: string, question: string) {
+    return this.retrieverService.retrieve(question, userId, 5);
   }
 }
