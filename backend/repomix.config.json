@@ -10,8 +10,8 @@
     "fileSummary": true,
     "directoryStructure": true,
     "files": true,
-    "removeComments": false,
-    "removeEmptyLines": false,
+    "removeComments": true,
+    "removeEmptyLines": true,
     "compress": false,
     "topFilesLength": 5,
     "showLineNumbers": false,
@@ -28,10 +28,11 @@
     }
   },
   "include": [
-    "src/queue/queue.service.ts",
-    "src/queue/queue.module.ts",
-    "src/document/processors/document.processor.ts",
-    "docker-compose.yml"
+    "package.json",
+    "src/llm/llm.service.ts",
+    "src/document/chunk.service.ts",
+    "src/document/pdf.service.ts",
+    "src/chat/chat.controller.ts"
   ],
   "ignore": {
     "useGitignore": true,

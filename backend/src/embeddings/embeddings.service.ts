@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 @Injectable()
@@ -14,5 +13,9 @@ export class EmbeddingsService {
     const result = await model.embedContent(text);
 
     return result.embedding.values;
+  }
+
+  async embedQuery(query: string): Promise<number[]> {
+    return this.embed(query);
   }
 }

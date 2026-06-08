@@ -9,6 +9,7 @@ import { LlmModule } from './llm/llm.module';
 
 import { QueueModule } from './queue/queue.module';
 import { DocumentModule } from './document/document.module';
+import { VectorModule } from './vector/vector.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { DocumentModule } from './document/document.module';
     QueueModule,
 
     DocumentModule,
+    VectorModule,
   ],
 })
 export class AppModule {}

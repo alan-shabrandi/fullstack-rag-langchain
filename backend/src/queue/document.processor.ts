@@ -77,21 +77,27 @@ export class DocumentProcessor extends WorkerHost {
       for (const [index, chunk] of chunks.entries()) {
         const embedding = await this.embeddingsService.embed(chunk);
 
-        await this.prisma.documentChunk.create({
+        const vector = `[${embedding.join(',')}]`;
+
+        const createdChunk = await this.prisma.documentChunk.create({
           data: {
             documentId,
             content: chunk,
             chunkIndex: index,
-
-            // Requires schema update:
-            // embedding Json?
-            // embeddedAt DateTime?
-            embedding,
             embeddedAt: new Date(),
           },
         });
 
-        // Prevent hitting Gemini rate limits
+        await this.prisma.$executeRawUnsafe(
+          `
+    UPDATE "DocumentChunk"
+    SET embedding = $1::vector
+    WHERE id = $2
+    `,
+          vector,
+          createdChunk.id,
+        );
+
         await new Promise((resolve) => setTimeout(resolve, 200));
       }
 
