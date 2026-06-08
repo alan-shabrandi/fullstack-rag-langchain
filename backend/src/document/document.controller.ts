@@ -14,7 +14,15 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import {
+  ApiDocumentTags,
+  ApiUploadDocument,
+  ApiGetDocuments,
+  ApiGetDocumentById,
+  ApiDeleteDocument,
+} from './document.swagger';
 
+@ApiDocumentTags()
 @Controller('documents')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('USER', 'ADMIN')
@@ -23,6 +31,7 @@ export class DocumentController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
+  @ApiUploadDocument()
   async upload(
     @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: { userId: string },
@@ -32,12 +41,14 @@ export class DocumentController {
   }
 
   @Get()
+  @ApiGetDocuments()
   async getDocuments(@CurrentUser() user: { userId: string }) {
     const docs = await this.documentService.getDocuments(user.userId);
     return { success: true, documents: docs };
   }
 
   @Get(':id')
+  @ApiGetDocumentById()
   async getDocument(
     @Param('id') id: string,
     @CurrentUser() user: { userId: string },
@@ -47,6 +58,7 @@ export class DocumentController {
   }
 
   @Delete(':id')
+  @ApiDeleteDocument()
   async deleteDocument(
     @Param('id') id: string,
     @CurrentUser() user: { userId: string },

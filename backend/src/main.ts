@@ -2,12 +2,13 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
+import { setupSwagger } from './common/swagger/swagger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN?.split(',') ?? true,
+    origin: true,
     credentials: true,
   });
 
@@ -21,9 +22,9 @@ async function bootstrap() {
     }),
   );
 
-  const port = Number(process.env.PORT || 3001);
+  setupSwagger(app);
 
-  await app.listen(port);
+  await app.listen(process.env.PORT || 3001);
 }
 
 bootstrap();

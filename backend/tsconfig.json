@@ -21,6 +21,9 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "strictPropertyInitialization": false,
-    "types": ["node", "multer"]
+    "types": ["node", "multer"],
+    "paths": {
+      "@generated/*": ["./src/generated/*"]
+    }
   }
 }

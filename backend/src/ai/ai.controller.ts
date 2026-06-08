@@ -12,7 +12,9 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { ApiAiTags, ApiChatOperation } from './ai.swagger';
 
+@ApiAiTags()
 @Controller('ai')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class AiController {
@@ -21,6 +23,7 @@ export class AiController {
   @Post('chat')
   @Roles('USER', 'ADMIN')
   @HttpCode(HttpStatus.OK)
+  @ApiChatOperation()
   async chat(
     @Body() dto: ChatDto,
     @CurrentUser() user: { userId: string; role: string },

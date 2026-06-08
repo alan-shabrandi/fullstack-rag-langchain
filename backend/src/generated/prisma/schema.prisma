@@ -39,8 +39,9 @@ model Message {
 }
 
 model Document {
-  id            String          @id @default(uuid())
-  userId        String
+  id     String @id @default(uuid())
+  userId String
+
   fileName      String
   mimeType      String
   fileSize      Int
@@ -58,7 +59,6 @@ model DocumentChunk {
   documentId String
   content    String
   chunkIndex Int
-  embedding  Json?
   embeddedAt DateTime?
   createdAt  DateTime  @default(now())
   document   Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
