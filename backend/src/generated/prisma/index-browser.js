@@ -152,6 +152,7 @@ exports.Prisma.DocumentScalarFieldEnum = {
   mimeType: 'mimeType',
   fileSize: 'fileSize',
   storagePath: 'storagePath',
+  extractedText: 'extractedText',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

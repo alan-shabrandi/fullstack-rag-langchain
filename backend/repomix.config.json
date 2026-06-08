@@ -28,13 +28,10 @@
     }
   },
   "include": [
-    "prisma/schema.prisma",
-    "src/auth/jwt.strategy.ts",
-    "src/auth/decorators/current-user.decorator.ts",
-    "src/prisma/prisma.service.ts",
-    "src/ai/ai.service.ts",
-    "src/ai/ai.controller.ts",
-    "src/llm/llm.service.ts"
+    "src/queue/queue.service.ts",
+    "src/queue/queue.module.ts",
+    "src/document/processors/document.processor.ts",
+    "docker-compose.yml"
   ],
   "ignore": {
     "useGitignore": true,

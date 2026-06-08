@@ -1,46 +1,57 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
-import * as fs from 'fs';
-import * as pdfParse from 'pdf-parse';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-
-@Processor('document-processing')
+import { PdfService } from '../document/pdf.service';
+import { DOCUMENT_QUEUE } from './queue.constants';
+import { DocumentStatus } from '../generated/prisma';
+@Injectable()
+@Processor(DOCUMENT_QUEUE)
 export class DocumentProcessor extends WorkerHost {
-  constructor(private readonly prisma: PrismaService) {
+  private readonly logger = new Logger(DocumentProcessor.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly pdfService: PdfService,
+  ) {
     super();
   }
 
-  async process(job: Job): Promise<void> {
-    const { documentId, filePath } = job.data as {
-      documentId: string;
-      filePath: string;
-    };
-
-    // Update status → PROCESSING
-    await this.prisma.document.update({
-      where: { id: documentId },
-      data: { status: 'PROCESSING' },
-    });
+  async process(job: Job<any>) {
+    const { documentId, filePath } = job.data;
 
     try {
-      const dataBuffer = fs.readFileSync(filePath);
-      const data = await (pdfParse as any)(dataBuffer);
-      const text = data.text;
-
-      console.log(`Processed text length: ${text.length}`);
-
-      // Update status → COMPLETED
       await this.prisma.document.update({
         where: { id: documentId },
-        data: { status: 'COMPLETED' },
+        data: { status: DocumentStatus.PROCESSING },
       });
-    } catch (err) {
-      console.error(err);
+
+      const extractedText = await this.pdfService.extractText(filePath);
+
       await this.prisma.document.update({
-        where: { id: documentId },
-        data: { status: 'FAILED' },
+        where: {
+          id: documentId,
+        },
+        data: {
+          extractedText,
+          status: DocumentStatus.COMPLETED,
+        },
       });
-      throw err;
+
+      this.logger.log(`Document ${documentId} processed`);
+    } catch (error) {
+      this.logger.error(error);
+
+      await this.prisma.document.update({
+        where: {
+          id: documentId,
+        },
+        data: {
+          status: DocumentStatus.FAILED,
+        },
+      });
+
+      throw error;
     }
   }
 }

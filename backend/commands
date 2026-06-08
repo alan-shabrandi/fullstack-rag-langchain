@@ -1,1 +1,3 @@
 npx prisma migrate dev --name add_chat_title
+npx prisma generate
+npx repomix

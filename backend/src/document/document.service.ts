@@ -58,7 +58,11 @@ export class DocumentService {
       },
     });
 
-    await this.queueService.addDocumentJob(document.id, filePath);
+    await this.queueService.addDocumentJob(
+      document.id,
+      filePath,
+      document.mimeType,
+    );
 
     return document;
   }

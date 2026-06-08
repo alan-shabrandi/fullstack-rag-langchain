@@ -4551,6 +4551,7 @@ export namespace Prisma {
     mimeType: string | null
     fileSize: number | null
     storagePath: string | null
+    extractedText: string | null
     status: $Enums.DocumentStatus | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4563,6 +4564,7 @@ export namespace Prisma {
     mimeType: string | null
     fileSize: number | null
     storagePath: string | null
+    extractedText: string | null
     status: $Enums.DocumentStatus | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4575,6 +4577,7 @@ export namespace Prisma {
     mimeType: number
     fileSize: number
     storagePath: number
+    extractedText: number
     status: number
     createdAt: number
     updatedAt: number
@@ -4597,6 +4600,7 @@ export namespace Prisma {
     mimeType?: true
     fileSize?: true
     storagePath?: true
+    extractedText?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -4609,6 +4613,7 @@ export namespace Prisma {
     mimeType?: true
     fileSize?: true
     storagePath?: true
+    extractedText?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -4621,6 +4626,7 @@ export namespace Prisma {
     mimeType?: true
     fileSize?: true
     storagePath?: true
+    extractedText?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -4720,6 +4726,7 @@ export namespace Prisma {
     mimeType: string
     fileSize: number
     storagePath: string
+    extractedText: string | null
     status: $Enums.DocumentStatus
     createdAt: Date
     updatedAt: Date
@@ -4751,6 +4758,7 @@ export namespace Prisma {
     mimeType?: boolean
     fileSize?: boolean
     storagePath?: boolean
+    extractedText?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4764,6 +4772,7 @@ export namespace Prisma {
     mimeType?: boolean
     fileSize?: boolean
     storagePath?: boolean
+    extractedText?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4777,6 +4786,7 @@ export namespace Prisma {
     mimeType?: boolean
     fileSize?: boolean
     storagePath?: boolean
+    extractedText?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4790,12 +4800,13 @@ export namespace Prisma {
     mimeType?: boolean
     fileSize?: boolean
     storagePath?: boolean
+    extractedText?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "fileName" | "mimeType" | "fileSize" | "storagePath" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
+  export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "fileName" | "mimeType" | "fileSize" | "storagePath" | "extractedText" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
   export type DocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -4818,6 +4829,7 @@ export namespace Prisma {
       mimeType: string
       fileSize: number
       storagePath: string
+      extractedText: string | null
       status: $Enums.DocumentStatus
       createdAt: Date
       updatedAt: Date
@@ -5251,6 +5263,7 @@ export namespace Prisma {
     readonly mimeType: FieldRef<"Document", 'String'>
     readonly fileSize: FieldRef<"Document", 'Int'>
     readonly storagePath: FieldRef<"Document", 'String'>
+    readonly extractedText: FieldRef<"Document", 'String'>
     readonly status: FieldRef<"Document", 'DocumentStatus'>
     readonly createdAt: FieldRef<"Document", 'DateTime'>
     readonly updatedAt: FieldRef<"Document", 'DateTime'>
@@ -5728,6 +5741,7 @@ export namespace Prisma {
     mimeType: 'mimeType',
     fileSize: 'fileSize',
     storagePath: 'storagePath',
+    extractedText: 'extractedText',
     status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -6052,6 +6066,7 @@ export namespace Prisma {
     mimeType?: StringFilter<"Document"> | string
     fileSize?: IntFilter<"Document"> | number
     storagePath?: StringFilter<"Document"> | string
+    extractedText?: StringNullableFilter<"Document"> | string | null
     status?: EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
     createdAt?: DateTimeFilter<"Document"> | Date | string
     updatedAt?: DateTimeFilter<"Document"> | Date | string
@@ -6065,6 +6080,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     fileSize?: SortOrder
     storagePath?: SortOrder
+    extractedText?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6081,6 +6097,7 @@ export namespace Prisma {
     mimeType?: StringFilter<"Document"> | string
     fileSize?: IntFilter<"Document"> | number
     storagePath?: StringFilter<"Document"> | string
+    extractedText?: StringNullableFilter<"Document"> | string | null
     status?: EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
     createdAt?: DateTimeFilter<"Document"> | Date | string
     updatedAt?: DateTimeFilter<"Document"> | Date | string
@@ -6094,6 +6111,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     fileSize?: SortOrder
     storagePath?: SortOrder
+    extractedText?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6114,6 +6132,7 @@ export namespace Prisma {
     mimeType?: StringWithAggregatesFilter<"Document"> | string
     fileSize?: IntWithAggregatesFilter<"Document"> | number
     storagePath?: StringWithAggregatesFilter<"Document"> | string
+    extractedText?: StringNullableWithAggregatesFilter<"Document"> | string | null
     status?: EnumDocumentStatusWithAggregatesFilter<"Document"> | $Enums.DocumentStatus
     createdAt?: DateTimeWithAggregatesFilter<"Document"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Document"> | Date | string
@@ -6310,6 +6329,7 @@ export namespace Prisma {
     mimeType: string
     fileSize: number
     storagePath: string
+    extractedText?: string | null
     status?: $Enums.DocumentStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6323,6 +6343,7 @@ export namespace Prisma {
     mimeType: string
     fileSize: number
     storagePath: string
+    extractedText?: string | null
     status?: $Enums.DocumentStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6334,6 +6355,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     storagePath?: StringFieldUpdateOperationsInput | string
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6347,6 +6369,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     storagePath?: StringFieldUpdateOperationsInput | string
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6359,6 +6382,7 @@ export namespace Prisma {
     mimeType: string
     fileSize: number
     storagePath: string
+    extractedText?: string | null
     status?: $Enums.DocumentStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6370,6 +6394,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     storagePath?: StringFieldUpdateOperationsInput | string
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6382,6 +6407,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     storagePath?: StringFieldUpdateOperationsInput | string
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6657,6 +6683,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     fileSize?: SortOrder
     storagePath?: SortOrder
+    extractedText?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6673,6 +6700,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     fileSize?: SortOrder
     storagePath?: SortOrder
+    extractedText?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -6685,6 +6713,7 @@ export namespace Prisma {
     mimeType?: SortOrder
     fileSize?: SortOrder
     storagePath?: SortOrder
+    extractedText?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7139,6 +7168,7 @@ export namespace Prisma {
     mimeType: string
     fileSize: number
     storagePath: string
+    extractedText?: string | null
     status?: $Enums.DocumentStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7150,6 +7180,7 @@ export namespace Prisma {
     mimeType: string
     fileSize: number
     storagePath: string
+    extractedText?: string | null
     status?: $Enums.DocumentStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7218,6 +7249,7 @@ export namespace Prisma {
     mimeType?: StringFilter<"Document"> | string
     fileSize?: IntFilter<"Document"> | number
     storagePath?: StringFilter<"Document"> | string
+    extractedText?: StringNullableFilter<"Document"> | string | null
     status?: EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
     createdAt?: DateTimeFilter<"Document"> | Date | string
     updatedAt?: DateTimeFilter<"Document"> | Date | string
@@ -7447,6 +7479,7 @@ export namespace Prisma {
     mimeType: string
     fileSize: number
     storagePath: string
+    extractedText?: string | null
     status?: $Enums.DocumentStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -7481,6 +7514,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     storagePath?: StringFieldUpdateOperationsInput | string
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7492,6 +7526,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     storagePath?: StringFieldUpdateOperationsInput | string
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7503,6 +7538,7 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     storagePath?: StringFieldUpdateOperationsInput | string
+    extractedText?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -1,23 +1,40 @@
 import { Injectable } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+
 import { Queue } from 'bullmq';
+
+import { DOCUMENT_QUEUE, DOCUMENT_JOB } from './queue.constants';
 
 @Injectable()
 export class QueueService {
-  public documentQueue: Queue;
+  constructor(
+    @InjectQueue(DOCUMENT_QUEUE)
+    private readonly documentQueue: Queue,
+  ) {}
 
-  constructor() {
-    this.documentQueue = new Queue('document-processing', {
-      connection: {
-        host: process.env.REDIS_HOST || 'localhost',
-        port: parseInt(process.env.REDIS_PORT || '6379', 10),
+  async addDocumentJob(documentId: string, filePath: string, mimeType: string) {
+    if (mimeType !== 'application/pdf') {
+      throw new Error('Only PDF currently supported');
+    }
+    return this.documentQueue.add(
+      DOCUMENT_JOB.PROCESS,
+      {
+        documentId,
+        filePath,
+        mimeType,
       },
-    });
-  }
+      {
+        attempts: 5,
 
-  async addDocumentJob(documentId: string, filePath: string) {
-    return this.documentQueue.add('process-document', {
-      documentId,
-      filePath,
-    });
+        backoff: {
+          type: 'exponential',
+          delay: 3000,
+        },
+
+        removeOnComplete: 100,
+
+        removeOnFail: 500,
+      },
+    );
   }
 }
